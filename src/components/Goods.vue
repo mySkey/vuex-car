@@ -44,7 +44,9 @@
       <li class="item df" v-for="(v,k) in goods" :key="k">
         <img class="item-cover" :src="v.cover" alt="">
         <div class="title df df1">
-          <h4>{{v.name}}</h4>
+          <h4>{{v.name}}
+            <span style="font-size:12px;color:#999;">{{v.price}}元</span>
+          </h4>
           <div class="item-right">
             <div @click="add(v)">加入购物车</div>
           </div>
@@ -74,6 +76,8 @@ export default {
   },
   created(){
     document.title = '商品列表页'
+    document.body.scrollTop = 0
+    document.documentElement.scrollTop = 0
     this.getList()
   },
   methods:{
@@ -83,13 +87,13 @@ export default {
     getList(){
       ajax.get('https://cnodejs.org/api/v1/topics', this.con).then(res=>{
         res.data.forEach(v=>{
-          this.goods.push({ id: v.id, cover: v.author.avatar_url, name: v.author.loginname})
+          this.goods.push({ id: v.id, price: v.reply_count, cover: v.author.avatar_url, name: v.author.loginname})
         })
       })
     },
     add(v){
       this.$store.dispatch('addCar', v)
-      console.log(this.car)
+      this.$router.push('/detail')
     },
     toCar(){
       this.$router.push('/detail')
